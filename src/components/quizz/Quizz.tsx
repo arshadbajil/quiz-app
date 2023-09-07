@@ -13,9 +13,11 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 
 import { RootState } from "../../redux/store";
+import { logout } from "../../redux/actions/auth";
 
 const questions = [
   {
@@ -113,14 +115,28 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     minWidth: "100px"
+  },
+  logoutButton: {
+    position: "fixed",
+    top: "5%",
+    right: "5%",
+    width: "40px",
+    height: "40px",
+    border: "1px solid black",
+    cursor: "pointer",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   }
 }));
 
 const Quiz: React.FC = () => {
-  const email = useSelector((state: RootState) => state.auth.email);
-
   const classes = useStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const email = useSelector((state: RootState) => state.auth.email);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
@@ -160,10 +176,17 @@ const Quiz: React.FC = () => {
     setScore(0);
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
   const currentQues = questions[currentQuestion];
 
   return (
     <div className={classes.root}>
+      <div className={classes.logoutButton} onClick={handleLogout}>
+        <PowerSettingsNewIcon />
+      </div>
       <CssBaseline />
       <Container
         component="main"

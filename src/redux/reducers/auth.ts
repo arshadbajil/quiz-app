@@ -1,7 +1,7 @@
 // Example using createReducer from @reduxjs/toolkit
 
 import { createReducer } from "@reduxjs/toolkit";
-import { login, logout, register } from "../actions/auth";
+import { login, logout, reLogin, register } from "../actions/auth";
 
 interface User {
   firstName: string;
@@ -63,7 +63,10 @@ const authReducer = createReducer(initialState, (builder) => {
           error: "Email / password is wrong"
         };
       }
-
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({ email: action.payload.email })
+      );
       return {
         ...state,
         isAuthenticated: true,
@@ -72,8 +75,28 @@ const authReducer = createReducer(initialState, (builder) => {
       };
     })
     .addCase(logout, (state) => {
-      state.isAuthenticated = false;
-      state.email = null;
+      localStorage.removeItem("auth");
+      return {
+        ...state,
+        isAuthenticated: false,
+        email: null
+      };
+    })
+    .addCase(reLogin, (state) => {
+      const email = localStorage.getItem("auth");
+
+      if (email) {
+        return {
+          ...state,
+          isAuthenticated: true,
+          email: JSON.parse(email).email
+        };
+      }
+      return {
+        ...state,
+        isAuthenticated: false,
+        email: null
+      };
     });
 });
 

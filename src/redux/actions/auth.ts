@@ -11,5 +11,5 @@ export const register = createAction<{
 export const login = createAction<{ email: string; password: string }>(
   "auth/login"
 );
-
+export const reLogin = createAction("auth/re-login");
 export const logout = createAction("auth/logout");

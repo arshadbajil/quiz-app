@@ -53,7 +53,7 @@ const Login: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-
+  const error = useSelector((state: RootState) => state.auth.error);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -122,6 +122,7 @@ const Login: React.FC = () => {
         >
           New user? Register now
         </Link>
+        {error && <small style={{ color: "red" }}>{error}</small>}
       </PaperContainer>
     </RootContainer>
   );

@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Welcome from "./components/welcome/Welcome";
@@ -10,11 +10,21 @@ import My404Component from "./components/error/404";
 
 import { RootState } from "./redux/store";
 import Success from "./components/success/Success";
+import { reLogin } from "./redux/actions/auth";
 
 const App: React.FC = () => {
+  const dispatch = useDispatch();
+
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+
+  useEffect(() => {
+    const email = localStorage.getItem("auth");
+    if (email && !isAuthenticated) {
+      dispatch(reLogin());
+    }
+  }, [dispatch, isAuthenticated]);
 
   return (
     <Router>
